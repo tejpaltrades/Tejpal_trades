@@ -1,0 +1,32 @@
+name: Start EC2 Instance
+
+on:
+  schedule:
+    # 5:30 PM IST = 12:00 PM UTC
+    - cron: '0 3 * * 1-5'
+
+  workflow_dispatch:
+
+jobs:
+  start-ec2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Start EC2 instance
+        run: |
+          aws ec2 start-instances \
+            --instance-ids i-03b7eb9cabca9646e
+
+      - name: Check instance status
+        run: |
+          aws ec2 describe-instances \
+            --instance-ids i-03b7eb9cabca9646e \
+            --query "Reservations[0].Instances[0].State.Name" \
+            --output text
