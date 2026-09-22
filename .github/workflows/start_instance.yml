@@ -3,7 +3,7 @@ name: Start EC2 Instance
 on:
   schedule:
     # 5:OO PM IST = 12:00 PM UTC
-    - cron: '0 12 * * 1-5'
+    - cron: '5 12 * * 1-5'
 
   workflow_dispatch:
 
